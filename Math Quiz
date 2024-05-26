@@ -1,0 +1,68 @@
+# Math quiz
+# made by Leroy Labuschagne
+# 23 May 2024
+
+import random
+
+
+class MathQuiz:
+    def __init__(self, num_questions=10):
+        # Initialize the number of questions and score
+        self.num_questions = num_questions
+        self.score = 0
+
+    def generate_question(self):
+        # Generate two random integers for the operands
+        a = random.randint(1, 100)
+        b = random.randint(1, 100)
+        # Randomly choose an operator
+        operator = random.choice(['+', '-', '*', '/'])
+
+        # Ensure no division by zero
+        if operator == '/':
+            while b == 0:
+                b = random.randint(1, 10)
+
+        # Create the question based on the chosen operator
+        if operator == '+':
+            answer = a + b
+        elif operator == '-':
+            answer = a - b
+        elif operator == '*':
+            answer = a * b
+        elif operator == '/':
+            answer = a / b
+
+        # Return the question and the correct answer
+        return f"What is {a} {operator} {b}?", answer
+
+    def ask_question(self, question, answer):
+        try:
+            # Ask the user the question and get their response
+            user_answer = float(input(question + " "))
+            # Compare the user's answer to the correct answer
+            if abs(user_answer - answer) < 0.01:  # Allowing for floating point precision issues
+                print("Correct!")
+                self.score += 1
+            else:
+                print(f"Wrong! The correct answer is {answer}")
+        except ValueError:
+            # Handle the case where the user input is not a valid number
+            print("You have skipped this question!!!")
+
+    def run_quiz(self):
+        print("Welcome to the Math Quiz!")
+        input("How many questions will you like: ")  # Asking the player how many questions he wants
+        for _ in range(self.num_questions):
+            # Generate and ask each question
+            question, answer = self.generate_question()
+            self.ask_question(question, answer)
+        # Display the final score
+        print(f"Quiz finished! Your final score is {self.score}/{self.num_questions}")
+
+
+if __name__ == "__main__":
+    # Create a MathQuiz instance with a specified number of questions
+    quiz = MathQuiz(num_questions=10)
+    # Run the quiz
+    quiz.run_quiz()
